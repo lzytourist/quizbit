@@ -1,5 +1,5 @@
 from rest_framework import status
-from rest_framework.generics import ListCreateAPIView
+from rest_framework.generics import ListCreateAPIView, RetrieveUpdateDestroyAPIView
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.permissions import IsAuthenticated, IsAdminUser
 from rest_framework.response import Response
@@ -59,3 +59,14 @@ class MCQListCreateAPIView(ListCreateAPIView):
             },
             status=status.HTTP_201_CREATED
         )
+
+
+class MCQRetrieveUpdateDestroyAPIView(RetrieveUpdateDestroyAPIView):
+    serializer_class = QuestionSerializer
+    queryset = Question.objects.all()
+    permission_classes = [IsAuthenticated, IsAdminUser]
+
+    def get_permissions(self):
+        if self.request.method == 'GET':
+            return []
+        return super().get_permissions()
