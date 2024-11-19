@@ -70,3 +70,16 @@ class MCQRetrieveUpdateDestroyAPIView(RetrieveUpdateDestroyAPIView):
         if self.request.method == 'GET':
             return []
         return super().get_permissions()
+
+
+class OptionListCreateAPIView(ListCreateAPIView):
+    serializer_class = QuestionOptionSerializer
+    queryset = QuestionOption.objects.all()
+    permission_classes = [IsAuthenticated, IsAdminUser]
+    pagination_class = PageNumberPagination
+
+
+class OptionRetrieveUpdateDestroyAPIView(RetrieveUpdateDestroyAPIView):
+    serializer_class = QuestionOptionSerializer
+    queryset = QuestionOption.objects.all()
+    permission_classes = [IsAuthenticated, IsAdminUser]
