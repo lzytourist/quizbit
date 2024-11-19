@@ -1,4 +1,7 @@
 from django.db import models
+from django.contrib.auth import get_user_model
+
+User = get_user_model()
 
 
 class Question(models.Model):
@@ -29,3 +32,20 @@ class QuestionOption(models.Model):
 
     class Meta:
         db_table = 'mcq_question_options'
+
+
+class PracticeHistory(models.Model):
+    user = models.ForeignKey(
+        to=User,
+        on_delete=models.CASCADE,
+        related_name='practice_history'
+    ),
+    question = models.ForeignKey(
+        to=Question,
+        on_delete=models.CASCADE,
+        related_name='practice_history'
+    )
+    attempt_at = models.DateTimeField(auto_now_add=True)
+    submitted_at = models.DateTimeField()
+    obtained_marks = models.DecimalField(max_digits=5, decimal_places=2, default=0)
+    is_correct = models.BooleanField(default=False)
