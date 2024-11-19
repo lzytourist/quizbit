@@ -1,5 +1,7 @@
 from django.urls import path
 
-urlpatterns = [
+from .views import MCQListCreateAPIView
 
+urlpatterns = [
+    path('questions/', MCQListCreateAPIView.as_view(), name='questions'),
 ]
