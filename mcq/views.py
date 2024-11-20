@@ -106,6 +106,7 @@ class PracticeHistoryListAPIView(ListAPIView):
     queryset = PracticeHistory.objects.all()
     serializer_class = PracticeHistorySerializer
     permission_classes = [IsAuthenticated]
+    pagination_class = PageNumberPagination
 
     def get_queryset(self):
         queryset = super().get_queryset()
