@@ -46,6 +46,12 @@ class PracticeHistory(models.Model):
         related_name='practice_history'
     )
     attempt_at = models.DateTimeField(auto_now_add=True)
-    submitted_at = models.DateTimeField()
+    submitted_at = models.DateTimeField(null=True)
     obtained_marks = models.DecimalField(max_digits=5, decimal_places=2, default=0)
     is_correct = models.BooleanField(default=False)
+
+    # Time spent between first question view to submission
+    def time_spent(self):
+        if self.submitted_at is None:
+            return 0
+        return (self.submitted_at - self.attempt_at).total_seconds()
