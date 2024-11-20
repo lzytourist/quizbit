@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth import get_user_model
+from django.utils import timezone
 
 User = get_user_model()
 
@@ -45,7 +46,7 @@ class PracticeHistory(models.Model):
         on_delete=models.CASCADE,
         related_name='practice_history'
     )
-    attempt_at = models.DateTimeField(auto_now_add=True)
+    attempt_at = models.DateTimeField()
     submitted_at = models.DateTimeField(null=True)
     obtained_marks = models.DecimalField(max_digits=5, decimal_places=2, default=0)
     is_correct = models.BooleanField(default=False)
@@ -53,8 +54,8 @@ class PracticeHistory(models.Model):
     # Time spent between first question view to submission
     def time_spent(self):
         if self.submitted_at is None:
-            return 0
-        return (self.submitted_at - self.attempt_at).total_seconds()
+            return timezone.now() - self.attempt_at
+        return self.submitted_at - self.attempt_at
 
     def __str__(self):
         return f'{self.user.get_full_name()}: {self.question.question}'

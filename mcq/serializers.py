@@ -26,9 +26,14 @@ class QuestionSerializer(serializers.ModelSerializer):
 
 
 class PracticeHistorySerializer(serializers.ModelSerializer):
+    time_spent = serializers.SerializerMethodField(source='get_time_spent')
+
     class Meta:
         model = PracticeHistory
         fields = '__all__'
+
+    def get_time_spent(self, obj):
+        return obj.time_spent()
 
 
 class SubmissionSerializer(serializers.Serializer):

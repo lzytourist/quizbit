@@ -138,21 +138,22 @@ class SubmissionAPIView(APIView):
             Q(submitted_at__isnull=True)
         ).first()
         if attempt_history is None:
-            # Check if previously attempted with wrong answer
+            # Check if previously submission with wrong answer
             # Take the first attempt
-            attempt_history = self.request.user.practice_history.filter(
+            submission = self.request.user.practice_history.filter(
                 question_id=serializer.data.get('question')
             ).order_by('id').first()
 
-            if attempt_history is None:
+            if submission is None:
                 # Illegal access, without accessing the question first
                 return Response(status=status.HTTP_403_FORBIDDEN)
 
             # Create new record having first attempt time
             # Occurs when user is submitting again for the same question without accessing the question again
-            attempt_history = self.request.user.practice_history.create(
-                attempt_at=attempt_history.attempt_at,
+            attempt_history = PracticeHistory(
+                attempt_at=submission.attempt_at,
                 question_id=serializer.data.get('question'),
+                user=self.request.user
             )
 
         attempt_history.submitted_at = timezone.now()
