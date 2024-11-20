@@ -1,14 +1,13 @@
 from django.db.models import Q
-from django.utils import timezone
 
 from rest_framework import status
-from rest_framework.generics import ListCreateAPIView, RetrieveUpdateDestroyAPIView
+from rest_framework.generics import ListAPIView, ListCreateAPIView, RetrieveUpdateDestroyAPIView
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.permissions import IsAuthenticated, IsAdminUser
 from rest_framework.response import Response
 
-from .models import Question, QuestionOption
-from .serializers import QuestionSerializer, QuestionOptionSerializer
+from .models import Question, QuestionOption, PracticeHistory
+from .serializers import QuestionSerializer, QuestionOptionSerializer, PracticeHistorySerializer
 
 
 class MCQListCreateAPIView(ListCreateAPIView):
@@ -101,3 +100,23 @@ class OptionRetrieveUpdateDestroyAPIView(RetrieveUpdateDestroyAPIView):
     serializer_class = QuestionOptionSerializer
     queryset = QuestionOption.objects.all()
     permission_classes = [IsAuthenticated, IsAdminUser]
+
+
+class PracticeHistoryListAPIView(ListAPIView):
+    queryset = PracticeHistory.objects.all()
+    serializer_class = PracticeHistorySerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        queryset = super().get_queryset()
+
+        # Get only current user practice history if user is not admin
+        if not self.request.user.is_staff:
+            return queryset.filter(user=self.request.user).order_by('-id')
+
+        # Filter specific user practice history
+        # Only if authenticated user is admin
+        elif self.request.query_params.get('user'):
+            return queryset.filter(user=self.request.query_params.get('user'))
+
+        return queryset

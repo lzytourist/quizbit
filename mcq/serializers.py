@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from .models import Question, QuestionOption
+from .models import Question, QuestionOption, PracticeHistory
 
 
 class QuestionOptionSerializer(serializers.ModelSerializer):
@@ -23,3 +23,9 @@ class QuestionSerializer(serializers.ModelSerializer):
             'created_at': {'read_only': True},
             'updated_at': {'read_only': True},
         }
+
+
+class PracticeHistorySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = PracticeHistory
+        fields = '__all__'
