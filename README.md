@@ -15,3 +15,6 @@
   - Submission time and total time spent for the submission.
   - Correctness and partial marking.
   - Multiple choice for a question.
+
+  
+<b>**User have to access the question before submitting the answer.</b>
