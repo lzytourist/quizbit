@@ -1,0 +1,560 @@
+{
+	"info": {
+		"_postman_id": "a636de8d-274f-4b5a-a8cc-43ad15a6a1f9",
+		"name": "QuizBit",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "9785272"
+	},
+	"item": [
+		{
+			"name": "Account",
+			"item": [
+				{
+					"name": "Login",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"username\": \"lzytourist\",\n    \"password\": \"12345678\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/account/login/",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"account",
+								"login",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Register",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"first_name\": \"Monowar Hossain\",\n    \"last_name\": \"Khan\",\n    \"username\": \"lzytourist\",\n    \"email\": \"mhkha2022@gmail.com\",\n    \"password\": \"12345678\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/account/register/",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"account",
+								"register",
+								""
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"description": "User login and registration."
+		},
+		{
+			"name": "MCQ",
+			"item": [
+				{
+					"name": "Options",
+					"item": [
+						{
+							"name": "List options",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Token {{adminToken}}",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{baseUrl}}/mcq/options/",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"mcq",
+										"options",
+										""
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Option Details",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Token {{adminToken}}",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{baseUrl}}/mcq/options/1/",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"mcq",
+										"options",
+										"1",
+										""
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Create option",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Token {{adminToken}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"question\": 100,\n    \"option\": \"Option\",\n    \"is_correct\": true\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/mcq/options/",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"mcq",
+										"options",
+										""
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Update option",
+							"request": {
+								"method": "PATCH",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Token {{adminToken}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"question\": 1,\n    \"option\": \"Option update\",\n    \"is_correct\": false\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/mcq/options/1/",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"mcq",
+										"options",
+										"1",
+										""
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Delete option",
+							"request": {
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Token {{adminToken}}",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{baseUrl}}/mcq/options/1/",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"mcq",
+										"options",
+										"1",
+										""
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "List questions",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/mcq/questions/",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"mcq",
+								"questions",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create question with options",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Token {{adminToken}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"question\": \"What is the capital of Banglades?\",\n    \"options\": [\n        {\n            \"option\": \"Dhaka\",\n            \"is_correct\": true\n        },\n        {\n            \"option\": \"Rajshahi\"\n        }\n    ]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/mcq/questions/",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"mcq",
+								"questions",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create question without options",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Token {{adminToken}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"question\": \"What is the capital of Banglades?\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/mcq/questions/",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"mcq",
+								"questions",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Question details",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/mcq/questions/1/",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"mcq",
+								"questions",
+								"1",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Mark user access to a question",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Token {{userToken}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/mcq/questions/1/",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"mcq",
+								"questions",
+								"1",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update question details",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Token {{adminToken}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"question\": \"Which is the capital of Bangladesh?\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/mcq/questions/23/",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"mcq",
+								"questions",
+								"23",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete question",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Token {{adminToken}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"question\": \"Which is the capital of Bangladesh?\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/mcq/questions/23/",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"mcq",
+								"questions",
+								"23",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "List practice history",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Token {{userToken}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/mcq/practice-history/",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"mcq",
+								"practice-history",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "List practice history (Admin)",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Token {{adminToken}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/mcq/practice-history/?user=2",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"mcq",
+								"practice-history",
+								""
+							],
+							"query": [
+								{
+									"key": "user",
+									"value": "2"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Submit answer",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Token {{userToken}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"options\": [17],\n    \"question\": 1\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/mcq/submit/",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"mcq",
+								"submit",
+								""
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "baseUrl",
+			"value": "http://127.0.0.1:8000/api",
+			"type": "string"
+		},
+		{
+			"key": "adminToken",
+			"value": "5acbc65e0e793e3cdb0dbfc1be27ba911ff3401c",
+			"type": "string"
+		},
+		{
+			"key": "userToken",
+			"value": "8891ab224c78bdebf89d42e6b7746bbbef88e3d4",
+			"type": "string"
+		}
+	]
+}
