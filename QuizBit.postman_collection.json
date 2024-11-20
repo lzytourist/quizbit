@@ -64,6 +64,31 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "Logout",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Token {{userToken}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/account/logout/",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"account",
+								"logout",
+								""
+							]
+						}
+					},
+					"response": []
 				}
 			],
 			"description": "User login and registration."
