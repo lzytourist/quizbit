@@ -55,3 +55,6 @@ class PracticeHistory(models.Model):
         if self.submitted_at is None:
             return 0
         return (self.submitted_at - self.attempt_at).total_seconds()
+
+    class Meta:
+        db_table = 'mcq_practice_histories'
