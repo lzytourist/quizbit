@@ -1,13 +1,15 @@
 from django.db.models import Q
+from django.utils import timezone
 
 from rest_framework import status
+from rest_framework.views import APIView
 from rest_framework.generics import ListAPIView, ListCreateAPIView, RetrieveUpdateDestroyAPIView
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.permissions import IsAuthenticated, IsAdminUser
 from rest_framework.response import Response
 
 from .models import Question, QuestionOption, PracticeHistory
-from .serializers import QuestionSerializer, QuestionOptionSerializer, PracticeHistorySerializer
+from .serializers import QuestionSerializer, QuestionOptionSerializer, PracticeHistorySerializer, SubmissionSerializer
 
 
 class MCQListCreateAPIView(ListCreateAPIView):
@@ -121,3 +123,54 @@ class PracticeHistoryListAPIView(ListAPIView):
             return queryset.filter(user=self.request.query_params.get('user'))
 
         return queryset
+
+
+class SubmissionAPIView(APIView):
+    serializer_class = SubmissionSerializer
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request, *args, **kwargs):
+        serializer = self.serializer_class(data=request.data, context={'request': request})
+        serializer.is_valid(raise_exception=True)
+
+        attempt_history = self.request.user.practice_history.filter(
+            Q(question_id=serializer.data.get('question')) &
+            Q(submitted_at__isnull=True)
+        ).first()
+        if attempt_history is None:
+            # Check if previously attempted with wrong answer
+            # Take the first attempt
+            attempt_history = self.request.user.practice_history.filter(
+                question_id=serializer.data.get('question')
+            ).order_by('id').first()
+
+            if attempt_history is None:
+                # Illegal access, without accessing the question first
+                return Response(status=status.HTTP_403_FORBIDDEN)
+
+            # Create new record having first attempt time
+            # Occurs when user is submitting again for the same question without accessing the question again
+            attempt_history = self.request.user.practice_history.create(
+                attempt_at=attempt_history.attempt_at,
+                question_id=serializer.data.get('question'),
+            )
+
+        attempt_history.submitted_at = timezone.now()
+
+        answers = attempt_history.question.options.filter(is_correct=True).values('id')
+        answer_ids = set([answer['id'] for answer in answers])
+        given_answers = set(serializer.data.get('options', []))
+
+        correct = answer_ids.intersection(given_answers)
+        if answer_ids == given_answers:
+            attempt_history.is_correct = True
+
+        attempt_history.obtained_marks = max(
+            0.0,
+            (len(correct) - 0.25 * (len(given_answers) - len(correct))) / len(answer_ids)
+        )
+        attempt_history.save()
+
+        return Response(data={
+            **PracticeHistorySerializer(attempt_history).data
+        }, status=status.HTTP_201_CREATED)
