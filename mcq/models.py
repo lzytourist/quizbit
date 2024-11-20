@@ -39,7 +39,7 @@ class PracticeHistory(models.Model):
         to=User,
         on_delete=models.CASCADE,
         related_name='practice_history'
-    ),
+    )
     question = models.ForeignKey(
         to=Question,
         on_delete=models.CASCADE,
@@ -55,6 +55,9 @@ class PracticeHistory(models.Model):
         if self.submitted_at is None:
             return 0
         return (self.submitted_at - self.attempt_at).total_seconds()
+
+    def __str__(self):
+        return f'{self.user.get_full_name()}: {self.question.question}'
 
     class Meta:
         db_table = 'mcq_practice_histories'

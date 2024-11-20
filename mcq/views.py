@@ -1,3 +1,6 @@
+from django.db.models import Q
+from django.utils import timezone
+
 from rest_framework import status
 from rest_framework.generics import ListCreateAPIView, RetrieveUpdateDestroyAPIView
 from rest_framework.pagination import PageNumberPagination
@@ -68,8 +71,23 @@ class MCQRetrieveUpdateDestroyAPIView(RetrieveUpdateDestroyAPIView):
 
     def get_permissions(self):
         if self.request.method == 'GET':
-            return []
+            return [IsAuthenticated()]
         return super().get_permissions()
+
+    # Store attempt time for a user
+    def get_object(self):
+        question = super().get_object()
+        if self.request.method == 'GET' and not self.request.user.is_staff:
+            last_history = question.practice_history.filter(
+                Q(user=self.request.user) &
+                Q(submitted_at__isnull=True)
+            ).first()
+
+            if last_history is None:
+                question.practice_history.create(
+                    user=self.request.user,
+                )
+        return question
 
 
 class OptionListCreateAPIView(ListCreateAPIView):
